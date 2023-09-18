@@ -69,7 +69,7 @@ class PresensiController extends Controller
 
         //cek jarak sebelum absen
         if($radius > $tilok->radius){
-            echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda". $radius . " meter dari Kantor!|radius";
+            echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda ". $radius . " meter dari Kantor!|radius";
         }else {
             if($cek > 0)
             {
