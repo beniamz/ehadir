@@ -6,6 +6,7 @@ use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\KonfigurasiController;
+use App\Http\Controllers\MadrasahController;
 use App\Http\Controllers\PendidikController;
 use App\Http\Controllers\PresensiController;
 use Illuminate\Support\Facades\Route;
@@ -95,9 +96,20 @@ Route::middleware(['auth:user'])->group(function() {
     Route::get('/presensi/{id}/batalkanizinsakit', [PresensiController::class, 'batalkanizinsakit']);
 
 
+    //Madrasah
+    Route::get('/madrasah', [MadrasahController::class, 'index']);
+    Route::post('/madrasah/store', [MadrasahController::class, 'store']);
+    Route::post('/madrasah/edit', [MadrasahController::class, 'edit']);
+    Route::post('/madrasah/update', [MadrasahController::class, 'update']);
+    Route::post('/madrasah/{kode_madrasah}/delete', [MadrasahController::class, 'delete']);
+
+
     //konfigurasi
-    Route::get('konfigurasi/lokasikantor', [KonfigurasiController::class, 'lokasikantor']);
-    Route::post('konfigurasi/updatelokasikantor', [KonfigurasiController::class, 'updatelokasikantor']);
+    Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class, 'lokasikantor']);
+    Route::post('/konfigurasi/updatelokasikantor', [KonfigurasiController::class, 'updatelokasikantor']);
+    Route::get('/konfigurasi/jamkerja', [KonfigurasiController::class, 'jamkerja']);
+    
+
     
 });
 

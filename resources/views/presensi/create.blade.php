@@ -96,15 +96,21 @@
 
             var map = L.map('map').setView([position.coords.latitude, position.coords.longitude], 15);
 
-            var lokasi_kantor = "{{ $tilok->lokasi_kantor }}";
+            var lokasi_kantor = "{{ $tilok->lokasi_madrasah }}";
             var lok = lokasi_kantor.split(",");
             var lat_kantor = lok[0];
             var long_kantor = lok[1];
-            var radius = "{{ $tilok->radius }}";
+            var radius = "{{ $tilok->radius_madrasah }}";
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,            
-            }).addTo(map);
+
+            L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+                maxZoom: 20,
+                subdomains:['mt0','mt1','mt2','mt3']
+            })
+            // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            //     maxZoom: 19,            
+            // })
+            .addTo(map);
             var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
             // titik lokasi kantor        
             var circle = L.circle([lat_kantor, long_kantor], {
@@ -146,7 +152,7 @@
                             text: status[1],
                             icon: 'success'                            
                         })
-                        setTimeout("location.href='/dashboard'", 4000);
+                        setTimeout("location.href='/dashboard'", 3000);
                     } else {
                         if(status[2] == "radius") {
                             radius_sound.play();

@@ -22,9 +22,9 @@ class PresensiController extends Controller
             ->where('tgl_presensi', $hariini)
             ->where('nik', $nik)->count();
         
-        //titik lokasi kantor
-        $tilok = DB::table('konfigurasi_lokasi')->where('id',1)->first();        
-
+        //titik lokasi kantor        
+        $kode_madrasah = Auth::guard('pendidik')->user()->kode_madrasah;
+        $tilok = DB::table('madrasah')->where('kode_madrasah', $kode_madrasah)->first();        
         return view('presensi.create', compact('cek','tilok'));
     }
 
@@ -32,12 +32,13 @@ class PresensiController extends Controller
     {
 
         $nik = Auth::guard('pendidik')->user()->nik;
+        $kode_madrasah = Auth::guard('pendidik')->user()->kode_madrasah;
         $tgl_presensi = date("Y-m-d");
         $jam = date("H:i:s");
 
         //lokasi Kantor
-        $tilok = DB::table('konfigurasi_lokasi')->where('id',1)->first();
-        $lok = explode(",",$tilok->lokasi_kantor);
+        $tilok = DB::table('madrasah')->where('kode_madrasah', $kode_madrasah)->first();
+        $lok = explode(",",$tilok->lokasi_madrasah);
         $latitudekantor = $lok[0];
         $longitudekantor = $lok[1];
         
@@ -68,8 +69,8 @@ class PresensiController extends Controller
         $file = $folderPath . $fileName;        
 
         //cek jarak sebelum absen
-        if($radius > $tilok->radius){
-            echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda ". $radius . " meter dari Kantor!|radius";
+        if($radius > $tilok->radius_madrasah) {
+            echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda " . $radius . " meter dari Kantor!|radius";
         }else {
             if($cek > 0)
             {
@@ -290,7 +291,16 @@ class PresensiController extends Controller
             ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
             ->orderBy('tgl_presensi')
             ->get();
-            
+        
+        //Export Excel
+        if (isset($_POST['exportexcel'])) {
+            $time = date("d-M-Y  H:i:s");
+            //fungsi header dengan mengirimkan raw data excel
+            header("Content-type: application/vnd-ms-excel");
+            //mengidentifikasi nama file ekspor "hasil-export.xls"
+            header("Content-Disposition: attachment; filename=Laporan Kehadiran $time.xls");
+            return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namabulan', 'pendidik', 'presensi'));
+        }
 
         return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'pendidik', 'presensi'));
 
@@ -347,6 +357,15 @@ class PresensiController extends Controller
             ->groupByRaw('presensi.nik,nama_lengkap')
             ->get();
             // dd($rekap);
+
+            //Export Excel
+            if (isset($_POST['exportexcel'])) {
+                $time = date("d-M-Y  H:i:s");
+                //fungsi header dengan mengirimkan raw data excel
+                header("Content-type: application/vnd-ms-excel");
+                //mengidentifikasi nama file ekspor "hasil-export.xls"
+                header("Content-Disposition: attachment; filename=Rekapitulasi Kehadiran Pendidik $time.xls");
+            }
 
         return view('presensi.cetakrekap', compact('bulan','tahun','rekap','namabulan'));
     }

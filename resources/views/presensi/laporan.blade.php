@@ -24,7 +24,7 @@
         <div class="card">
           <div class="card-body">
             
-            <form action="/presensi/cetaklaporan" target="_blank" method="POST">
+            <form action="/presensi/cetaklaporan" id="frmLaporan" target="_blank" method="POST">
               @csrf
               <div class="row">
                 <div class="col-12">
@@ -58,7 +58,7 @@
               <div class="row mt-2">
                 <div class="col-12">
                   <div class="form-group">
-                    <select name="nik" id="nik" class="form-select" required>
+                    <select name="nik" id="nik" class="form-select" >
                       <option value="">Pilih Pendidik</option>
                       @foreach($pendidik as $d)
                         <option value="{{$d->nik}}">{{ $d->nama_lengkap }}</option>
@@ -107,3 +107,28 @@
 </div>
 
 @endsection
+
+@push('myscript')
+<script>
+$(function() {
+  $("#frmLaporan").submit(function(e) {
+      // var bulan = $("#bulan").val();
+      // var tahun = $("#tahun").val();
+      var nik = $("#nik").val();
+      if(nik == "") {
+        Swal.fire({
+            title: 'Warning !',
+            text: 'Nama Lengkap harus Diisi',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+            }).then ((result) => {
+              $("#nama_lengkap").focus();
+            });
+      }
+      return false;
+  });
+
+});
+</script>
+
+@endpush

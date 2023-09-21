@@ -90,10 +90,23 @@
   <div class="row mb-2">
     <div class="col-12">
       <div class="form-group">
+        <select name="kode_madrasah" id="kode_madrasah" class="form-select" name="kode_madrasah">
+        <option value="">Pilih Madrasah</option>
+        @foreach($madrasah as $d)
+        <option {{ $pendidik->kode_madrasah == $d->kode_madrasah ? 'selected' : '' }} value="{{ $d->kode_madrasah }}">{{ strtoupper($d->nama_madrasah) }}</option>
+        @endforeach
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-2">
+    <div class="col-12">
+      <div class="form-group">
         <select name="kode_dept" id="kode_dept" class="form-select">
-        <option value="">-Pilih Status-</option>
+        <option value="">Pilih Status</option>
         @foreach($departemen as $d)
-        <option {{ $pendidik->kode_dept == $d->kode_dept ? 'selected' : '' }} value="{{ $d->kode_dept }}">{{ $d->nama_dept }}</option>
+        <option {{ $pendidik->kode_dept == $d->kode_dept ? 'selected' : '' }} value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
         @endforeach
         </select>
       </div>

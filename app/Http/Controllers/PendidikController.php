@@ -20,6 +20,7 @@ class PendidikController extends Controller
         $query = Pendidik::query();
         $query->select('pendidik.*','nama_dept');
         $query->join('departemen', 'pendidik.kode_dept', '=', 'departemen.kode_dept');
+        // $query->join('madrasah', 'pendidik.kode_dept', '=', 'madrasah.kode_madrasah');
         $query->orderBy('nama_lengkap');
 
         if(!empty($request->nama_pendidik)) {
@@ -31,9 +32,10 @@ class PendidikController extends Controller
         }
 
         $pendidik = $query->paginate(10)->fragment('pddk');
-
         $departemen = DB::table('departemen')->get();
-        return view('pendidik.index', compact('pendidik', 'departemen'));
+        $madrasah = DB::table('madrasah')->orderBy('kode_madrasah')->get();
+
+        return view('pendidik.index', compact('pendidik', 'departemen', 'madrasah'));
     }
 
     public function store(Request $request) 
@@ -44,6 +46,7 @@ class PendidikController extends Controller
         $nama_lengkap   = $request->nama_lengkap;
         $jabatan        = $request->jabatan;
         $no_hp          = $request->no_hp;
+        $kode_madrasah  = $request->kode_madrasah;
         $kode_dept      = $request->kode_dept;
         $foto           = $request->foto;
         $password       = Hash::make("123456");
@@ -65,6 +68,7 @@ class PendidikController extends Controller
                 'no_hp'         => $no_hp,
                 'foto'          => $foto,
                 'kode_dept'     => $kode_dept,
+                'kode_madrasah' => $kode_madrasah,
                 'password'      => $password
             ];
 
@@ -80,7 +84,7 @@ class PendidikController extends Controller
             } catch (\Exception $e) {
                 // dd($e);
                 if($e->getCode() == 23000) {
-                    $message = "Data dengan NIK" . $nik . "Sudah Ada";
+                    $message = "Data dengan NIK " . $nik . "Sudah Ada";
                 }
                 return Redirect::back()->with(['warning' => 'Ooops, Data Gagal Disimpan' .$message]);
         }
@@ -90,9 +94,11 @@ class PendidikController extends Controller
     {
         $nik = $request->nik;
         $departemen = DB::table('departemen')->get();
+        $madrasah = DB::table('madrasah')->get();
         //query tampilkan data cuma 1 data pake first
         $pendidik = DB::table('pendidik')->where('nik', $nik)->first();
-        return view('pendidik.edit', compact('departemen', 'pendidik'));
+        $madrasah = DB::table('madrasah')->orderBy('kode_madrasah')->get();
+        return view('pendidik.edit', compact('departemen', 'pendidik', 'madrasah'));
     }
 
     public function update($nik, Request $request)
@@ -103,6 +109,7 @@ class PendidikController extends Controller
         $jabatan        = $request->jabatan;
         $no_hp          = $request->no_hp;
         $kode_dept      = $request->kode_dept;
+        $kode_madrasah  = $request->kode_madrasah;
         // $foto           = $request->foto;
         $old_foto       = $request->old_foto;
         $password       = Hash::make("123456");
@@ -123,6 +130,7 @@ class PendidikController extends Controller
                 'no_hp'         => $no_hp,
                 'foto'          => $foto,
                 'kode_dept'     => $kode_dept,
+                'kode_madrasah'     => $kode_madrasah,
                 'password'      => $password
             ];
 
@@ -140,7 +148,7 @@ class PendidikController extends Controller
             } catch (\Exception $e) {
                 // dd($e);
                 if($e->getCode() == 23000) {
-                    $message = "Data dengan NIK" . $nik . "Sudah Ada";
+                    $message = "Data dengan NIK " . $nik . "Sudah Ada";
                 }
                 return Redirect::back()->with(['warning' => 'Ooops, Data Gagal Diupdate' .$message]);
         }
@@ -150,7 +158,7 @@ class PendidikController extends Controller
     {
         $delete = DB::table('pendidik')->where('nik', $nik)->delete();
         if($delete) {
-            return Redirect::back()->with(['success' => 'Alhamdu;illah, Data Berhasil Dihapus!']);
+            return Redirect::back()->with(['success' => 'Alhamdulillah, Data Berhasil Dihapus!']);
         }else{
             return Redirect::back()->with(['warning' => 'Data gagal Dihapus!']);
             

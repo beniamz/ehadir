@@ -26,10 +26,16 @@ class DepartemenController extends Controller
     {
         $kode_dept = $request->kode_dept;
         $nama_dept = $request->nama_dept;
+
         $data = [
              'kode_dept' => $kode_dept,       
-             'nama_dept' => $nama_dept       
+             'nama_dept' => $nama_dept
         ];
+
+        $cek = DB::table('departemen')->where('kode_dept', $kode_dept)->count();
+        if($cek>0) {
+           return Redirect::back()->with(['warning' => 'Data dengan Kode tersebut sudah ada!']); 
+        }
 
         $simpan = DB::table('departemen')->insert($data);
         if($simpan) {
@@ -51,7 +57,7 @@ class DepartemenController extends Controller
      
         $nama_dept      = $request->nama_dept; 
         $data = [ 
-                'nama_dept'     => $nama_dept               
+            'nama_dept' => $nama_dept               
         ];
 
         $update = DB::table('departemen')->where('kode_dept', $kode_dept)->update($data);

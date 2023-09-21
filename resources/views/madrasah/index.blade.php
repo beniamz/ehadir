@@ -10,7 +10,7 @@
         </div>
         -->
         <h2 class="page-title">
-          Data Pendidik
+          Data Madrasah
         </h2>
       </div>
     </div>
@@ -43,7 +43,7 @@
 
             <div class="row">
               <div class="col-12">
-                <a href="#" class="btn btn-primary mb-2" id="btnTambahPendidik">
+                <a href="#" class="btn btn-primary mb-2" id="btnTambahMadrasah">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                     <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -51,30 +51,27 @@
                     <path d="M19 16v6"></path>
                     <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
                   </svg>
-                 Tambah Pendidik
+                 Tambah Madrasah
                 </a>
               </div>
             </div>
 
             <div class="row">
               <div class="col-12 mb-2">
-                <form action="/pendidik" method="GET">
+                <form action="/madrasah" method="GET">
                   <div class="row">
-                    <div class="col-6">
-                      <div class="form-group">
-                        <input type="text" name="nama_pendidik" id="nama_pendidik" class="form-control" placeholder="Cari Nama Pendidik" value="{{ Request('nama_pendidik') }}">
-                      </div>
+                    <div class="col-10">
+
+                    <!-- form_pencarian -->
+                      <select name="kode_madrasah" id="" class="form-select">
+                          <option value="">Semua Madrasah</option>
+                      </select>
+
+                      <!-- <div class="form-group">
+                        <input type="text" name="nama_madrasah" id="nama_madrasah" class="form-control" placeholder="Cari Madrasah" value="{{ Request('nama_madrasah') }}">
+                      </div> -->
                     </div>
-                    <div class="col-4">
-                      <div class="form-group">
-                        <select name="kode_dept" id="kode_dept" class="form-select">
-                          <option value="">-Status Pendidik-</option>
-                          @foreach($departemen as $d)
-                            <option {{ Request('kode_dept') == $d->kode_dept ? 'selected' : '' }} value="{{ $d->kode_dept }}">{{ $d->nama_dept }}</option>
-                          @endforeach
-                        </select>
-                      </div>
-                    </div>
+                    
                     <div class="col-2">
                       <div class="form-group">
                         <button type="submit" class="btn btn-primary">
@@ -93,57 +90,38 @@
             </div>
 
             <div class="row table-responsive">
-              <div class="col-12 ">
+              <div class="col-12 table-responsive ">
                 <table class="table table-bordered table-striped table-hover mb-2 ">
-                  <thead class="table-light ">
+                  <thead class="table-primary">
                     <tr>
-                      <th class="text-center">No</th>
-                      <th class="text-center">NIK</th>
-                      <th class="text-center">NUPTK</th>
-                      <th class="text-center">Nama Lengkap</th>
-                      <th class="text-center">Jabatan</th>
-                      <th class="text-center">N0 HP</th>
-                      <th class="text-center">Photo</th>
-                      <th class="text-center">Asal Madrasah</th>
-                      <th class="text-center">Status</th>
-                      <th class="text-center">Action</th>
+                      <th>No</th>
+                      <th>Kode Madrasah</th>                     
+                      <th>Nama Madrasah</th>                      
+                      <th>Lokasi Madrasah</th>                      
+                      <th>Radius</th>                      
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach ($pendidik as $d)
-                    @php
-                      $path = Storage::url('uploads/pendidik/'.$d->foto);
-                    @endphp
-
+                    @foreach($madrasah as $m)
                       <tr>
-                        <td>{{ $loop->iteration + $pendidik->firstItem()-1 }}</td>
-                        <td>{{ $d->nik }}</td>
-                        <td>{{ $d->nuptk }}</td>
-                        <td>{{ $d->nama_lengkap }}</td>
-                        <td>{{ $d->jabatan }}</td>
-                        <td>{{ $d->no_hp }}</td>
-                        <td>
-                        @if(empty($d->foto))
-                            <img src="{{ asset('assets/img/nophoto.png') }}" class="avatar"  alt="">
-                          @else
-                            <img src="{{ url($path) }}" class="avatar"  alt="">
-                          @endif
-                        </td>
-                       
-                        <td>{{ $d->kode_madrasah }}</td>
-                        <td>{{ $d->nama_dept }}</td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $m->kode_madrasah }}</td>
+                        <td>{{ $m->nama_madrasah }}</td>
+                        <td>{{ $m->lokasi_madrasah }}</td>
+                        <td>{{ $m->radius_madrasah }}</td>
                         <td>
                           <div class="btn-group">
-                          <a href="#" class="edit btn btn-info btn-sm" nik="{{ $d->nik }}">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                              <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
-                              <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
-                              <path d="M16 5l3 3"></path>
-                            </svg>
-                          </a>
-                          
-                          <form action="/pendidik/{{ $d->nik }}/delete" method="POST" style="margin-left:5px">
+                          <a href="#" class="edit btn btn-info btn-sm" kode_madrasah="{{ $m->kode_madrasah }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                <path d="M16 5l3 3"></path>
+                              </svg>
+                            </a>
+
+                            <form action="/madrasah/{{ $m->kode_madrasah }}/delete" method="POST" style="margin-left:5px">
                             @csrf                            
 
                             <a href="#" class="delete-confirm btn btn-danger btn-sm ">
@@ -161,9 +139,9 @@
                         </td>
                       </tr>
                     @endforeach
+                    
                   </tbody>
-                </table>
-                {{ $pendidik->links() }}
+                </table>                
                 </div>
               </div>
             </div>
@@ -175,7 +153,7 @@
 </div>
 
 <!-- Form Modal TAMBAH PENDIDIK -->
-<div class="modal modal-blur fade" id="modal-inputpendidik" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-inputmadrasah" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -187,11 +165,11 @@
               <path d="M19 16v6"></path>
               <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
             </svg>
-               Tambah Data Pendidik</h5>
+               Tambah Data Madrasah</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form action="/pendidik/store" method="POST" id="frmPendidik" enctype="multipart/form-data" >
+            <form action="/madrasah/store" method="POST" id="frmMadrasah" >
               @csrf
               <div class="row">
                 <div class="col-12">
@@ -207,7 +185,7 @@
                       <path d="M5 12l14 0"></path>
                     </svg>
                   </span>
-                    <input type="text" value="" id="nik" name="nik" class="form-control" placeholder="NIK">
+                    <input type="text" value="" id="kode_madrasah" name="kode_madrasah" class="form-control" placeholder="Tanda petik (') + 3 Digit terakhit NSM Madrasah">
                   </div>
                 </div>
               </div>
@@ -226,7 +204,7 @@
                       <path d="M15 13h1v3h-1z"></path>
                     </svg>
                   </span>
-                    <input type="text" value="" id="nuptk" name="nuptk" class="form-control" placeholder="NUPTK">
+                    <input type="text" value="" id="nama_madrasah" name="nama_madrasah" class="form-control" placeholder="Nama Madrasah">
                   </div>
                 </div>
               </div>
@@ -236,13 +214,16 @@
                   <div class="input-icon mb-3">
                   <span class="input-icon-addon">
                     <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                      <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                    </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 18.5l-3 -1.5l-6 3v-13l6 -3l6 3l6 -3v7.5"></path>
+                        <path d="M9 4v13"></path>
+                        <path d="M15 7v5.5"></path>
+                        <path d="M21.121 20.121a3 3 0 1 0 -4.242 0c.418 .419 1.125 1.045 2.121 1.879c1.051 -.89 1.759 -1.516 2.121 -1.879z"></path>
+                        <path d="M19 18v.01"></path>
+                      </svg>
                   </span>
-                    <input type="text" value="" id="nama_lengkap" name="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                    <input type="text" value="" id="lokasi_madrasah" name="lokasi_madrasah" class="form-control" placeholder="Lokasi Latitude dan Longitude Madrasah">
                   </div>
                 </div>
               </div>
@@ -252,64 +233,18 @@
                   <div class="input-icon mb-3">
                   <span class="input-icon-addon">
                     <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-square" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M9 10a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
-                      <path d="M6 21v-1a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v1"></path>
-                      <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"></path>
-                    </svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-broadcast-tower" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"></path>
+                        <path d="M16.616 13.924a5 5 0 1 0 -9.23 0"></path>
+                        <path d="M20.307 15.469a9 9 0 1 0 -16.615 0"></path>
+                        <path d="M9 21l3 -9l3 9"></path>
+                        <path d="M10 19h4"></path>
+                      </svg>
                   </span>
-                    <input type="text" value="" id="jabatan" name="jabatan" class="form-control" placeholder="Jabatan">
+                    <input type="text" value="" id="radius_madrasah" name="radius_madrasah" class="form-control" placeholder="Radius diperbolehkan untuk Absen (skala meter)">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-                <div class="col-12">
-                  <div class="input-icon mb-3">
-                  <span class="input-icon-addon">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                      <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
-                      <path d="M15 6h6m-3 -3v6"></path>
-                    </svg>
-                  </span>
-                    <input type="text" value="" id="no_hp" name="no_hp" class="form-control" placeholder="No HP">
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mb-2">
-                <div class="col-12">
-                  <div class="form-group">
-                    <select name="kode_madrasah" id="kode_madrasah" class="form-select" name="kode_madrasah">
-                    <option value="">Pilih Madrasah</option>
-                    @foreach($madrasah as $d)
-                    <option value="{{ $d->kode_madrasah }}">{{ strtoupper($d->nama_madrasah) }}</option>
-                    @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mb-2">
-                <div class="col-12">
-                  <div class="form-group">
-                    <select name="kode_dept" id="kode_dept" class="form-select" name="kode_dept">
-                    <option value="">Pilih Status</option>
-                    @foreach($departemen as $d)
-                    <option value="{{ $d->kode_dept }}">{{ strtoupper($d->nama_dept) }}</option>
-                    @endforeach
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row mt-3">
-                <div class="col-12">
-                  <input type="file" class="form-control" id="foto" name="foto">
-                </div>                
               </div>
 
               <div class="row mt-3">
@@ -335,7 +270,7 @@
 <!-- END MODAL TAMBAH -->
 
 <!-- Form Modal EDIT-->
-<div class="modal modal-blur fade" id="modal-editpendidik" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal modal-blur fade" id="modal-editmadrasah" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -346,7 +281,7 @@
               <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5"></path>
               <path d="M18.42 15.61a2.1 2.1 0 0 1 2.97 2.97l-3.39 3.42h-3v-3l3.42 -3.39z"></path>
             </svg>
-               Edit Data Pendidik</h5>
+               Edit Data Madrasah</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body" id="loadeditform">
@@ -362,25 +297,25 @@
 @push('myscript')
 <script>
   $(function() {
-    $("#btnTambahPendidik").click(function() {
+    $("#btnTambahMadrasah").click(function() {
       // alert('test');
-      $("#modal-inputpendidik").modal("show");
+      $("#modal-inputmadrasah").modal("show");
     });
 
     $(".edit").click(function() {
-      var nik = $(this).attr('nik');
+      var kode_madrasah = $(this).attr('kode_madrasah');
       $.ajax({
           type: 'POST',
-          url: '/pendidik/edit',
+          url: '/madrasah/edit',
           data:{
             _token: "{{ csrf_token(); }}",
-            nik: nik
+            kode_madrasah: kode_madrasah
           },
           success:function(respond){
             $("#loadeditform").html(respond);
           }
       });      
-      $("#modal-editpendidik").modal("show");      
+      $("#modal-editmadrasah").modal("show");      
     });
 
       $(".delete-confirm").click(function(e) {
@@ -405,81 +340,61 @@
             }
           })
       });
-
-      $("#frmPendidik").submit(function() {
+  
+      $("#frmMadrasah").submit(function() {
         // ditampung oleh nik
-        var nik = $("#nik").val();
-        var nuptk = $("#nuptk").val();
-        var nama_lengkap = $("#nama_lengkap").val();
-        var jabatan = $("#jabatan").val();
-        var no_hp = $("#no_hp").val();
-        var kode_dept = $("frmPendidik").find("#kode_dept").val();  // kode_dept dibedakan dengan search
-        var foto = $("#foto").val();
-        // var password = $("#password").val();
+        var kode_madrasah = $("#kode_madrasah").val();
+        var nama_madrasah = $("#nama_madrasah").val();
+        var lokasi_madrasah = $("#lokasi_madrasah").val();
+        var radius_madrasah = $("#radius_madrasah").val();        
 
-        if(nik == ""){
+        if(kode_madrasah == ""){
           // alert('NIK harus diisi');
           Swal.fire({
             title: 'Warning !',
-            text: 'NIK harus Diisi',
+            text: 'Kode Madrasah harus Diisi',
             icon: 'warning',
             confirmButtonText: 'OK'
             }).then ((result) => {
-              $("#nik").focus();
+              $("#kode_madrasah").focus();
             });
               return false;
-          } else if (nuptk == "") {
-            Swal.fire({
+          } else if(nama_madrasah  == ""){
+          // alert('NIK harus diisi');
+          Swal.fire({
             title: 'Warning !',
-            text: 'NUPTK harus Diisi',
+            text: 'Nama Madrasah harus Diisi',
             icon: 'warning',
             confirmButtonText: 'OK'
             }).then ((result) => {
-              $("#nuptk").focus();
+              $("#nama_madrasah ").focus();
             });
               return false;
-          } else if (nama_lengkap == "") {
-            Swal.fire({
+          } else if(lokasi_madrasah == ""){
+          // alert('NIK harus diisi');
+          Swal.fire({
             title: 'Warning !',
-            text: 'Nama Lengkap harus Diisi',
+            text: 'Lokasi Madrasah harus Diisi',
             icon: 'warning',
             confirmButtonText: 'OK'
             }).then ((result) => {
-              $("#nama_lengkap").focus();
+              $("#lokasi_madrasah").focus();
             });
               return false;
-          } else if (jabatan == "") {
-            Swal.fire({
+          } else if(radius_madrasah == ""){
+          // alert('NIK harus diisi');
+          Swal.fire({
             title: 'Warning !',
-            text: 'Jabatan harus Diisi',
+            text: 'Radius Madrasah harus Diisi',
             icon: 'warning',
             confirmButtonText: 'OK'
             }).then ((result) => {
-              $("#jabatan").focus();
-            });
-              return false;
-          } else if (no_hp == "") {
-            Swal.fire({
-            title: 'Warning !',
-            text: 'No Handphone harus Diisi',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-            }).then ((result) => {
-              $("#no_hp").focus();
-            });
-              return false;
-          } else if (kode_dept == "") {
-            Swal.fire({
-            title: 'Warning !',
-            text: 'Status harus Diisi',
-            icon: 'warning',
-            confirmButtonText: 'OK'
-            }).then ((result) => {
-              $("#kode_dept").focus();
+              $("#radius_madrasah").focus();
             });
               return false;
           }
     });
+
 
   });
 </script>
