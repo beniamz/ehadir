@@ -7,7 +7,7 @@
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">Histori Presensi</div>
+        <div class="pageTitle">Histori Kehadiran</div>
         <div class="right"></div>
     </div>
     <!-- * App Header -->

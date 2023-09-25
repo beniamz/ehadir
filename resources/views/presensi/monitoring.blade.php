@@ -52,8 +52,11 @@
                       <th>Nuptk</th>
                       <th>Nama nama_lengkap</th>
                       <th>Status</th>
+                      <th>Jam Kerja</th>
+                      <th>Jam Masuk</th>
                       <th>Absen Masuk</th>
                       <th>Foto In</th>
+                      <th>Jam Pulang</th>
                       <th>Absen Pulang</th>
                       <th>Foto Out</th>
                       <th>keterangan</th>

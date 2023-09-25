@@ -112,7 +112,7 @@ function selisih($jam_masuk, $jam_keluar)
           <td style="text-align:center">
             <span class="title" >
             LAPORAN PRESENSI<br>
-            PERIODE BULAN : {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}
+            <b>PERIODE BULAN : {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}</b>
             </span>
           </td>
         </tr>        
@@ -131,29 +131,29 @@ function selisih($jam_masuk, $jam_keluar)
         <tr>
           <td>NIK</td>
           <td>:</td>
-          <td>{{ $pendidik->nik}}</td>
+          <td><b>{{ $pendidik->nik}}</b></td>
           
           <td>Jabatan</td>
           <td>:</td>
-          <td>{{ $pendidik->jabatan}}</td>
+          <td><b>{{ $pendidik->jabatan}}</b></td>
         </tr>  
         <tr>
           <td>NUPTK</td>
           <td>:</td>
-          <td>{{ $pendidik->nuptk}}</td>
+          <td><b>{{ $pendidik->nuptk}}</b></td>
 
           <td>Status Pendidik</td>
           <td>:</td>
-          <td>{{ $pendidik->nama_dept}}</td>
+          <td><b>{{ $pendidik->nama_dept}}</b></td>
         </tr> 
         <tr>
           <td>Nama Lengkap</td>
           <td>:</td>
-          <td>{{ $pendidik->nama_lengkap}}</td>
+          <td><b>{{ $pendidik->nama_lengkap}}</b></td>
 
           <td>No Handphone</td>
           <td>:</td>
-          <td>{{ $pendidik->no_hp}}</td>
+          <td><b>{{ $pendidik->no_hp}}</b></td>
         </tr>
       </table>
       <table class="tabelpresensi" style="width: 90%">
@@ -161,8 +161,10 @@ function selisih($jam_masuk, $jam_keluar)
             <th>No</th>
             <th>Tanggal</th>
             <th>Jam Masuk</th>
+            <th>Absen Masuk</th>
             <th>Foto</th>
             <th>Jam Pulang</th>
+            <th>Absen Pulang</th>
             <th>Foto</th>           
             <th>Keterangan</th>
             <th>Jml. Jam Kerja</th>
@@ -172,13 +174,15 @@ function selisih($jam_masuk, $jam_keluar)
               $foto_in = Storage::url('uploads/absensi/'.$d->foto_in);
               $foto_out = Storage::url('uploads/absensi/'.$d->foto_out);
 
-              $jamterlambat = selisih('07:00:00', $d->jam_in);
+              $jamterlambat = selisih($d->jam_masuk, $d->jam_in);
           @endphp
           <tr>
             <td style="text-align: center">{{ $loop->iteration }}</td>
             <td style="text-align: center">{{ date("d-m-y", strtotime($d->tgl_presensi)) }}</td>
+            <td style="text-align: center">{{ $d->jam_masuk}}</td>
             <td style="text-align: center">{{ $d->jam_in != null ? $d->jam_in : 'Tidak Absen' }}</td>
             <td><img src="{{ url($foto_in) }}" alt="foto" class="foto"></td>
+            <td style="text-align: center">{{ $d->jam_pulang }}</td>
             <td style="text-align: center">{{ $d->jam_out != null ? $d->jam_out : 'Tidak Absen' }}</td>
             <td style="text-align: center">
               @if($d->jam_out != null)
@@ -194,7 +198,7 @@ function selisih($jam_masuk, $jam_keluar)
               @endif
             </td>          
             <td style="text-align: center">
-              @if($d->jam_in > "07:15:00")
+              @if($d->jam_in > $d->jam_masuk)
                 Terlambat ( {{ $jamterlambat }} )
               @else
                 Tepat Waktu

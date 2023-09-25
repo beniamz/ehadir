@@ -9,6 +9,7 @@ class Madrasah extends Model
 {
     use HasFactory;
     protected $table = "madrasah";
+    public $incrementing = false;
   
     protected $fillable = [
         'kode_madrasah',

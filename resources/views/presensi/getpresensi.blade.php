@@ -27,10 +27,13 @@ function selisih($jam_masuk, $jam_keluar)
     <td>{{ $d->nuptk }}</td>
     <td>{{ $d->nama_lengkap }}</td>
     <td>{{ $d->nama_dept }}</td>
+    <td>{{ $d->nama_jam_kerja }}</td>
+    <td>{{ $d->jam_masuk }}</td>
     <td>{{ $d->jam_in }}</td>
     <td>
       <img src="{{ url($foto_in) }}" alt="avatar" class="avatar">
     </td>
+    <td>{{ $d->jam_pulang }}</td>
     <td>{!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger">Belum Absen</span>' !!}</td>
     <td>
       @if($d->jam_out != null)
@@ -45,9 +48,9 @@ function selisih($jam_masuk, $jam_keluar)
       @endif
     </td>
     <td>
-      @if($d->jam_in >= '07:15:00')
+      @if($d->jam_in >= $d->jam_masuk)
       @php
-          $jamterlambat = selisih('07:00:00', $d->jam_in);
+          $jamterlambat = selisih($d->jam_masuk, $d->jam_in);
       @endphp
         <span class="badge bg-danger">Terlambat: {{ $jamterlambat }}</span>
         @else

@@ -95,7 +95,7 @@
                   <thead class="table-primary">
                     <tr>
                       <th>No</th>
-                      <th>Kode Madrasah</th>                     
+                      <th>N S M</th>                     
                       <th>Nama Madrasah</th>                      
                       <th>Lokasi Madrasah</th>                      
                       <th>Radius</th>                      
@@ -111,8 +111,8 @@
                         <td>{{ $m->lokasi_madrasah }}</td>
                         <td>{{ $m->radius_madrasah }}</td>
                         <td>
-                          <div class="btn-group">
-                          <a href="#" class="edit btn btn-info btn-sm" kode_madrasah="{{ $m->kode_madrasah }}">
+                          <div class="gap-1 d-flex justify-content">
+                          <a href="#" class="edit btn btn-info" kode_madrasah="{{ $m->kode_madrasah }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
@@ -124,7 +124,7 @@
                             <form action="/madrasah/{{ $m->kode_madrasah }}/delete" method="POST" style="margin-left:5px">
                             @csrf                            
 
-                            <a href="#" class="delete-confirm btn btn-danger btn-sm ">
+                            <a href="#" class="delete-confirm btn btn-danger">
                               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M4 7l16 0"></path>

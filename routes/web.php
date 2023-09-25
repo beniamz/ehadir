@@ -95,19 +95,35 @@ Route::middleware(['auth:user'])->group(function() {
     Route::post('/presensi/approveizinsakit', [PresensiController::class, 'approveizinsakit']);
     Route::get('/presensi/{id}/batalkanizinsakit', [PresensiController::class, 'batalkanizinsakit']);
 
-
     //Madrasah
     Route::get('/madrasah', [MadrasahController::class, 'index']);
     Route::post('/madrasah/store', [MadrasahController::class, 'store']);
     Route::post('/madrasah/edit', [MadrasahController::class, 'edit']);
     Route::post('/madrasah/update', [MadrasahController::class, 'update']);
     Route::post('/madrasah/{kode_madrasah}/delete', [MadrasahController::class, 'delete']);
-
-
+    
     //konfigurasi
     Route::get('/konfigurasi/lokasikantor', [KonfigurasiController::class, 'lokasikantor']);
     Route::post('/konfigurasi/updatelokasikantor', [KonfigurasiController::class, 'updatelokasikantor']);
+
     Route::get('/konfigurasi/jamkerja', [KonfigurasiController::class, 'jamkerja']);
+    Route::post('/konfigurasi/storejamkerja', [KonfigurasiController::class, 'storejamkerja']);
+    Route::post('/konfigurasi/editjamkerja', [KonfigurasiController::class, 'editjamkerja']);
+    Route::post('/konfigurasi/updatejamkerja', [KonfigurasiController::class, 'updatejamkerja']);
+    Route::post('/konfigurasi/{kode_jam_kerja}/deletejamkerja', [KonfigurasiController::class, 'deletejamkerja']);
+    Route::get('/konfigurasi/{nik}/setjamkerja', [KonfigurasiController::class, 'setjamkerja']);
+    Route::post('/konfigurasi/storesetjamkerja', [KonfigurasiController::class, 'storesetjamkerja']);
+    Route::post('/konfigurasi/updatesetjamkerja', [KonfigurasiController::class, 'updatesetjamkerja']);
+
+    Route::get('/konfigurasi/jamkerjadept', [KonfigurasiController::class, 'jamkerjadept']);
+    Route::get('/konfigurasi/jamkerjadept/create', [KonfigurasiController::class, 'createjamkerjadept']);
+    Route::post('/konfigurasi/jamkerjadept/store', [KonfigurasiController::class, 'storejamkerjadept']);
+    Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/edit', [KonfigurasiController::class, 'editjamkerjadept']);
+    Route::post('/konfigurasi/jamkerjadept/{kode_jk_dept}/update', [KonfigurasiController::class, 'updatejamkerjadept']);
+    Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/show', [KonfigurasiController::class, 'showjamkerjadept']);
+    Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/delete', [KonfigurasiController::class, 'deletejamkerjadept']);
+
+
     
 
     

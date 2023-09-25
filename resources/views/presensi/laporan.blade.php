@@ -58,7 +58,7 @@
               <div class="row mt-2">
                 <div class="col-12">
                   <div class="form-group">
-                    <select name="nik" id="nik" class="form-select" >
+                    <select name="nik" id="nik" class="form-select" required>
                       <option value="">Pilih Pendidik</option>
                       @foreach($pendidik as $d)
                         <option value="{{$d->nik}}">{{ $d->nama_lengkap }}</option>
@@ -70,7 +70,7 @@
               <div class="row mt-2">
                 <div class="col-6">
                   <div class="form-group">
-                    <button class="btn btn-primary w-100" type="submit" name="cetak">
+                    <button class="btn btn-primary w-100" type="submit" name="cetaklaporan">
                       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-printer" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"></path>
@@ -111,9 +111,9 @@
 @push('myscript')
 <script>
 $(function() {
-  $("#frmLaporan").submit(function(e) {
-      // var bulan = $("#bulan").val();
-      // var tahun = $("#tahun").val();
+  $(".rmLaporan").submit(function(e) {
+      var bulan = $("#bulan").val();
+      var tahun = $("#tahun").val();
       var nik = $("#nik").val();
       if(nik == "") {
         Swal.fire({

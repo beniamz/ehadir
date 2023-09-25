@@ -13,19 +13,76 @@ use Illuminate\Support\Facades\Storage;
 
 class PresensiController extends Controller
 {
+     // merubah nama hari ke indonesia di jam digital
+     public function gethari()
+     {
+         $hari = date("D");
+
+         switch ($hari) {
+            case 'Sun' :
+                $hari_ini = "Minggu"; 
+                break;
+            
+            case 'Mon' :
+                $hari_ini = "Senin"; 
+                break;
+            
+            case 'Tue' :
+                $hari_ini = "Selasa"; 
+                break;
+            
+            case 'Wed' :
+                $hari_ini = "Rabu"; 
+                break;
+            
+            case 'Thu' :
+                $hari_ini = "Kamis"; 
+                break;
+            
+            case 'Fri' :
+                $hari_ini = "Jumát"; 
+                break;
+            
+            case 'Sat' :
+                $hari_ini = "Sabtu"; 
+                break;
+            
+            default:
+                $hari_ini = "Tidak diketahui";
+                break;        
+         }
+         return $hari_ini;
+     }
+
+
     public function create()
     {
-        //mengecek absen hari / tidak boleh dua kali
-        $nik = Auth::guard('pendidik')->user()->nik;
+       //mengecek absen hari / tidak boleh dua kali
         $hariini = date("Y-m-d");
+        $namahari = $this->gethari();
+        // dd($namahari);
+        $nik = Auth::guard('pendidik')->user()->nik;
         $cek = DB::table('presensi')
-            ->where('tgl_presensi', $hariini)
-            ->where('nik', $nik)->count();
+                ->where('tgl_presensi', $hariini)
+                ->where('nik', $nik)->count();
         
         //titik lokasi kantor        
         $kode_madrasah = Auth::guard('pendidik')->user()->kode_madrasah;
-        $tilok = DB::table('madrasah')->where('kode_madrasah', $kode_madrasah)->first();        
-        return view('presensi.create', compact('cek','tilok'));
+        $tilok = DB::table('madrasah')->where('kode_madrasah', $kode_madrasah)->first(); 
+        
+        //mendapatkan data jam kerja
+        $jamkerja = Db::table('konfigurasi_jamkerja')->where('nik', $nik)
+        ->join('jam_kerja', 'konfigurasi_jamkerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+        ->where('hari', $namahari)->first();
+        // dd($jamkerja);
+        if($jamkerja == null) {
+            return view('presensi.notifjamker');
+        } else {
+            return view('presensi.create', compact('cek','tilok', 'jamkerja'));
+        }
+
+        // return view('presensi.create', compact('cek','tilok', 'jamkerja'));
+
     }
 
     public function store(Request $request)
@@ -50,7 +107,14 @@ class PresensiController extends Controller
         
         $jarak = $this->distance($latitudekantor, $longitudekantor, $latitudeuser, $longitudeuser);
         $radius =  round($jarak["meters"]);
-        
+
+        // tidak bisa absen klo bukan jam kerjanya
+        $namahari = $this->gethari();
+        $jamkerja = Db::table('konfigurasi_jamkerja')->where('nik', $nik)
+        ->join('jam_kerja', 'konfigurasi_jamkerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+        ->where('hari', $namahari)->first();
+        // dd($jamkerja);
+
         //cek nik
         $cek = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('nik', $nik)->count();
 
@@ -71,40 +135,51 @@ class PresensiController extends Controller
         //cek jarak sebelum absen
         if($radius > $tilok->radius_madrasah) {
             echo "error|Maaf Anda Berada Diluar Radius, Jarak Anda " . $radius . " meter dari Kantor!|radius";
-        }else {
-            if($cek > 0)
-            {
-                $data_pulang = [
-                    'jam_out'        => $jam,
-                    'foto_out'       => $fileName,
-                    'lokasi_out'     => $lokasi
-                ];
-                $update = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('nik', $nik)->update($data_pulang);
-                if($update){
-                    echo  "success|Terima Kasih, Hati-hati Di Jalan!|out";
-                    Storage::put($file, $image_base64);        
+        } else {            
+             if ($cek > 0) {
+                // tidak bisa absen pulang jika belum waktunya
+                if($jam < $jamkerja->jam_pulang) {
+                    echo "error|Maaf Belum Waktunya Pulang|out";
                 } else {
-                    echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|out";
+                    $data_pulang = [
+                        'jam_out'        => $jam,
+                        'foto_out'       => $fileName,
+                        'lokasi_out'     => $lokasi
+                    ];
+                    $update = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('nik', $nik)->update($data_pulang);
+                    if($update){
+                        echo  "success|Terima Kasih, Hati-hati Di Jalan!|out";
+                        Storage::put($file, $image_base64);        
+                    } else {
+                        echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|out";
+                    }
                 }
             } else {
-                $data = [
-                    'nik'           => $nik,
-                    'tgl_presensi'  => $tgl_presensi,
-                    'jam_in'        => $jam,
-                    'foto_in'       => $fileName,
-                    'lokasi_in'     => $lokasi
-                ];
-        
-                $simpan = DB::table('presensi')->insert($data);
-                if($simpan){
-                    echo "success|Terima Kasih, Bismillah, Selamat Bekerja!|in";
-                    Storage::put($file, $image_base64);        
-                } else {
-                    echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|in";
-                }
+                // tidak bisa absen jika bukan jam kerjanya
+                if ($jam < $jamkerja->awal_jam_masuk) {
+                    echo "error|Maaf.., Belum waktunya melakukan Absensi|in";
+                } else if ($jam > $jamkerja->akhir_jam_masuk) {
+                    echo "error|Maaf tidak bisa Absen, karena melewati batas akhir jam absensi hari ini|in";
+                    } else {
+                        $data = [
+                            'nik'               => $nik,
+                            'tgl_presensi'      => $tgl_presensi,
+                            'jam_in'            => $jam,
+                            'foto_in'           => $fileName,
+                            'lokasi_in'         => $lokasi,
+                            'kode_jam_kerja'    => $jamkerja->kode_jam_kerja
+                        ];
+                
+                        $simpan = DB::table('presensi')->insert($data);
+                        if($simpan){
+                            echo "success|Terima Kasih, Bismillah, Selamat Bekerja!|in";
+                            Storage::put($file, $image_base64);        
+                        } else {
+                            echo "error|Maaf Gagal Absen, Silahkan Hubungi Tim IT|in";
+                        }
+                    }
             } 
-        }
-       
+        }       
     }
 
     //Menghitung Jarak
@@ -137,9 +212,12 @@ class PresensiController extends Controller
         $nuptk = $request->nuptk;
         $jabatan = $request->jabatan;
         $no_hp = $request->no_hp;
-        $password = Hash::make($request->password);
-        
+        $password = Hash::make($request->password);        
         $pendidik = DB::table('pendidik')->where('nik', $nik)->first();
+        $request->validate([
+            'foto' => 'image|mime:jpg|max:500|required'
+        ]);
+
         if($request->hasFile('foto')) {
             $foto = $nik . "." . $request->file('foto')->getClientOriginalExtension();
         } else {
@@ -246,7 +324,8 @@ class PresensiController extends Controller
     {
         $tanggal = $request->tanggal;
         $presensi = DB::table('presensi')
-        ->select('presensi.*', 'nama_lengkap', 'nama_dept', 'nuptk')
+        ->select('presensi.*', 'nama_lengkap', 'nama_dept', 'nuptk', 'jam_masuk', 'nama_jam_kerja', 'jam_masuk', 'jam_pulang')
+        ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=' , 'jam_kerja.kode_jam_kerja')
         ->join('pendidik', 'presensi.nik', '=', 'pendidik.nik')        
         ->join('departemen', 'pendidik.kode_dept', '=', 'departemen.kode_dept')
         ->where('tgl_presensi', $tanggal)
@@ -286,6 +365,7 @@ class PresensiController extends Controller
             ->first();
 
         $presensi = DB::table('presensi')
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=' , 'jam_kerja.kode_jam_kerja')
             ->where('nik', $nik)
             ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
             ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
@@ -319,7 +399,7 @@ class PresensiController extends Controller
         $namabulan = ["","Januari","Pebruari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"];
         $tahun  = $request->tahun;
         $rekap  = DB::table('presensi')
-            ->selectRaw('presensi.nik,nama_lengkap, 
+            ->selectRaw('presensi.nik,nama_lengkap,jam_masuk,jam_pulang,
             MAX(IF(DAY(tgl_presensi) = 1, CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) AS tgl_1,
             MAX(IF(DAY(tgl_presensi) = 2, CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) AS tgl_2,
             MAX(IF(DAY(tgl_presensi) = 3, CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) AS tgl_3,
@@ -352,9 +432,10 @@ class PresensiController extends Controller
             MAX(IF(DAY(tgl_presensi) = 30, CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) AS tgl_30,
             MAX(IF(DAY(tgl_presensi) = 31, CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) AS tgl_31')
             ->join('pendidik','presensi.nik','=','pendidik.nik')
+            ->leftJoin('jam_kerja', 'presensi.kode_jam_kerja', '=' , 'jam_kerja.kode_jam_kerja')
             ->whereRaw('MONTH(tgl_presensi)="'.$bulan.'"')
             ->whereRaw('YEAR(tgl_presensi)="'.$tahun.'"')
-            ->groupByRaw('presensi.nik,nama_lengkap')
+            ->groupByRaw('presensi.nik,nama_lengkap,jam_masuk,jam_pulang')
             ->get();
             // dd($rekap);
 

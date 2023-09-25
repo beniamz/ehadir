@@ -29,6 +29,12 @@
             {{ $messageerror }}
         </div>
         @endif
+
+        @error('foto')
+        <div class="alert alert-danger">
+            {{ $message }}
+        </div>
+        @enderror
     </div>
 </div>
 <form action="/presensi/{{ $pendidik->nik }}/updateprofile" method="POST" enctype="multipart/form-data">
@@ -59,8 +65,9 @@
                 <input type="password" class="form-control" name="password"  placeholder="password" autocomplete="off">
             </div>
         </div>
+        <span class="text-center" ><b>Photo Profile</b> (max:500kb)</span>
         <div class="custom-file-upload" id="fileUpload1">
-            <input type="file" name="foto" id="fileuploadInput" accept=".png, .jpg, .jpeg">
+            <input type="file" name="foto" id="fileuploadInput" accept=".jpg, .jpeg">
             <label for="fileuploadInput">
                 <span>
                     <strong>

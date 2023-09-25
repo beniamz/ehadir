@@ -15,8 +15,6 @@ class PendidikController extends Controller
 {
     public function index(Request $request)
     {
-        
-
         $query = Pendidik::query();
         $query->select('pendidik.*','nama_dept');
         $query->join('departemen', 'pendidik.kode_dept', '=', 'departemen.kode_dept');
@@ -84,9 +82,11 @@ class PendidikController extends Controller
             } catch (\Exception $e) {
                 // dd($e);
                 if($e->getCode() == 23000) {
-                    $message = "Data dengan NIK " . $nik . "Sudah Ada";
+                    $message = "Pendidik dengan NIK: " . $nik . "Sudah Ada";
+                } else {
+                    $message = "Hubungi IT demi perbaikan Aplikasi";
                 }
-                return Redirect::back()->with(['warning' => 'Ooops, Data Gagal Disimpan' .$message]);
+                return Redirect::back()->with(['warning' => 'Ooops, Data Pendidik Gagal Disimpan' .$message]);
         }
     }
 

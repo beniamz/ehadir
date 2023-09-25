@@ -113,8 +113,8 @@
                     @foreach ($pendidik as $d)
                     @php
                       $path = Storage::url('uploads/pendidik/'.$d->foto);
+                      
                     @endphp
-
                       <tr>
                         <td>{{ $loop->iteration + $pendidik->firstItem()-1 }}</td>
                         <td>{{ $d->nik }}</td>
@@ -130,11 +130,12 @@
                           @endif
                         </td>
                        
-                        <td>{{ $d->kode_madrasah }}</td>
+                       
+                        <td class="text-center">{{ $d->kode_madrasah }} </td>
                         <td>{{ $d->nama_dept }}</td>
                         <td>
-                          <div class="btn-group">
-                          <a href="#" class="edit btn btn-info btn-sm" nik="{{ $d->nik }}">
+                          <div class="gap-1 d-flex justify-content">
+                          <a href="#" class="edit btn btn-info" nik="{{ $d->nik }}">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                               <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
@@ -142,21 +143,31 @@
                               <path d="M16 5l3 3"></path>
                             </svg>
                           </a>
-                          
-                          <form action="/pendidik/{{ $d->nik }}/delete" method="POST" style="margin-left:5px">
-                            @csrf                            
 
-                            <a href="#" class="delete-confirm btn btn-danger btn-sm ">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M4 7l16 0"></path>
-                                <path d="M10 11l0 6"></path>
-                                <path d="M14 11l0 6"></path>
-                                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-                                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-                              </svg>
-                            </a>
-                          </form>
+                          <a href="/konfigurasi/{{ $d->nik }}/setjamkerja" class="btn btn-success ml-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M12.483 20.935c-.862 .239 -1.898 -.178 -2.158 -1.252a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.08 .262 1.496 1.308 1.247 2.173"></path>
+                              <path d="M16 19h6"></path>
+                              <path d="M19 16v6"></path>
+                              <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                            </svg>
+                          </a>
+                          
+                            <form action="/pendidik/{{ $d->nik }}/delete" method="POST" style="margin-left:1px">
+                              @csrf                            
+
+                              <a href="#" class="delete-confirm btn btn-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                  <path d="M4 7l16 0"></path>
+                                  <path d="M10 11l0 6"></path>
+                                  <path d="M14 11l0 6"></path>
+                                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                </svg>
+                              </a>
+                            </form>
                           </div>
                         </td>
                       </tr>
@@ -362,6 +373,11 @@
 @push('myscript')
 <script>
   $(function() {
+    // validasi form
+    $("#nik").mask("0000000000000000");
+    $("#nuptk").mask("0000000000000000");
+    $("#no_hp").mask("+62|000-0000-0000");
+
     $("#btnTambahPendidik").click(function() {
       // alert('test');
       $("#modal-inputpendidik").modal("show");

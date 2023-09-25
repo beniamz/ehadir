@@ -68,8 +68,6 @@
       font-size: 12px;
       padding-top: 20px;
     }
-    
-    
   </style>
 </head>
 
@@ -100,12 +98,12 @@ function selisih($jam_masuk, $jam_keluar)
     <table class="header" style="width: 100%">
       <tr>
         <td rowspan="2" style="text-align: center">
-          <img src="{{ asset('assets/img/logo_mi.png') }}" width="75%" height="75px">
+          <img src="{{ asset('assets/img/logo_mi.png') }}" width="90px" height="75px">
         </td>
         <td>
           <span class="title" >
           REKAPITULASI PRESENSI PENDIDIK DAN TENAGA KEPENDIDIKAN<br>
-          PERIODE BULAN : {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}<br>
+          <b>PERIODE BULAN : {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}</b><br>
           MADRASAH IBTIDAIYAH AL ISLAMIYAH AMZ
           <br>Jl. Jasawarga Kp. Sugutamu Rt.003/021 Kel. Baktijaya Kec. Sukmajaya Kota Depok 16418</br>
           </span>
@@ -132,7 +130,7 @@ function selisih($jam_masuk, $jam_keluar)
         @foreach ($rekap as $d)
         <tr>
           <td style="text-align:center; font-size: 10px;">{{ $loop->iteration }}</td>
-          <td style="font-size: 10px;">{{ $d->nama_lengkap }}</td>
+          <td style="font-size: 10px;">{{ strtoupper($d->nama_lengkap) }}</td>
 
             <?php 
               $totalhadir = 0;
@@ -147,28 +145,24 @@ function selisih($jam_masuk, $jam_keluar)
                   }else{
                     $hadir = explode("-",$d->$tgl);
                     $totalhadir += 1;
-                    if($hadir[0] > "07:15:00") {
+                    if($hadir[0] > $d->jam_masuk) {
                       $totaltelat += 1;
                     }
                   }
             ?>
               <td style="font-size: 10px; text-align:center">
-                <span>{{ $hadir[0] }}</span>
-                <!-- <span style="color:{{ $hadir[0]>"07:15:00" ? "red" : ""}}">
-                  {{ $hadir[0] }}
-                </span> -->
+                <!-- <span>{{ $hadir[0] }}</span> -->
+                <span style="color:{{ $hadir[0] > $d->jam_masuk ? "red" : ""}}"><b> {{ !empty($hadir[0]) ? $hadir[0] : '-'}}</b></span>
                 <br>
-                <span>{{ $hadir[1] }}</span>
-                <!-- <span style="color:{{ $hadir[1]<"15:30:00" ? "red" : ""}}">
-                  {{ $hadir[1] }}
-                </span> -->
+                <!-- <span>{{ $hadir[1] }}</span> -->
+                <span style="color:{{ $hadir[1] < $d->jam_pulang ? "red" : ""}}"><b> {{ !empty($hadir[1]) ? $hadir[1] : '-'}}</b></span>
               </td>
             <?php 
             }
             ?>
 
-            <td style="font-size: 10px; text-align:center">{{ $totalhadir }}</td>
-            <td style="font-size: 10px; text-align:center">{{ $totaltelat}}</td>
+            <td style="font-size: 10px; text-align:center"><b>{{ $totalhadir }}</b></td>
+            <td style="font-size: 10px; text-align:center"><b>{{ $totaltelat}}</b></td>
         </tr>
         @endforeach
 

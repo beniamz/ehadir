@@ -14,6 +14,7 @@ class Pendidik extends Authenticatable
 
     protected $table = "pendidik";
     protected $primaryKey = "nik";
+    public $incrementing = false;
     protected $fillable = [
         'nik',
         'nuptk',

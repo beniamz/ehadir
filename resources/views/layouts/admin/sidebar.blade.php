@@ -257,11 +257,14 @@
                 <div class="dropdown-menu {{ request()->is(['konfigurasi/lokasikantor', 'konfigurasi/*']) ? 'show' : '' }}">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
-                      <a class="dropdown-item {{ request()->is('konfigurasi/lokasikantor') ? 'active' : '' }}" href="/konfigurasi/lokasikantor">
+                      <!-- <a class="dropdown-item {{ request()->is('konfigurasi/lokasikantor') ? 'active' : '' }}" href="/konfigurasi/lokasikantor">
                         Titik Lokasi Kantor
-                      </a>
+                      </a> -->
                       <a class="dropdown-item {{ request()->is('konfigurasi/jamkerja') ? 'active' : '' }}" href="/konfigurasi/jamkerja">
                         Jam Kerja
+                      </a>
+                      <a class="dropdown-item {{ request()->is('konfigurasi/jamkerjadept') ? 'active' : '' }}" href="/konfigurasi/jamkerjadept">
+                        Jam Kerja Status Guru
                       </a>
                       
                     </div>
