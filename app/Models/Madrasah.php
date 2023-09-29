@@ -14,6 +14,8 @@ class Madrasah extends Model
     protected $fillable = [
         'kode_madrasah',
         'nama_madrasah',
+        'nama_kamad',
+        'nama_kaur_tu',
         'lokasi_madrasah',
         'radius_madrasah',
         

@@ -13,7 +13,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Sign in | E-Presensi</title>
+    <title>Sign in | E-Hadir</title>
     <!-- CSS files -->
     <link href="{{ asset('tabler/dist/css/tabler.min.css?1692870487') }}" rel="stylesheet"/>
     <link href="{{ asset('tabler/dist/css/tabler-flags.min.css?1692870487') }}" rel="stylesheet"/>
@@ -38,7 +38,7 @@
           <div class="col-lg">
             <div class="container-tight">
               <div class="text-center mb-4">
-                <a href="." class="navbar-brand navbar-brand-autodark"><img src="{{ asset('tabler/static/logo3.png') }}" height="36" alt=""></a>
+                <a href="." class="navbar-brand navbar-brand-autodark"><img src="{{ asset('tabler/static/logo2.png') }}" height="50" alt=""></a>
               </div>
               <div class="card card-md">
                 <div class="card-body">
@@ -87,7 +87,7 @@
             </div>
           </div>
           <div class="col-lg d-none d-lg-block">
-            <img src="{{ asset('tabler/static/illustrations/undraw_secure_login_pdn4.svg') }}" height="300" class="d-block mx-auto" alt="">
+            <img src="{{ asset('tabler/static/illustrations/undraw_mobile_application_mr4r.svg') }}" height="300" class="d-block mx-auto" alt="">
           </div>
         </div>
       </div>

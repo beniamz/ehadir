@@ -65,9 +65,9 @@
                 <input type="password" class="form-control" name="password"  placeholder="password" autocomplete="off">
             </div>
         </div>
-        <span class="text-center" ><b>Photo Profile</b> (max:500kb)</span>
+        <span class="text-center"><b>Photo Profile</b> (max:200kb)</span>
         <div class="custom-file-upload" id="fileUpload1">
-            <input type="file" name="foto" id="fileuploadInput" accept=".jpg, .jpeg">
+            <input type="file" name="foto" id="fileuploadInput" accept=".png">  <!--//.jpg, .jpeg -->
             <label for="fileuploadInput">
                 <span>
                     <strong>

@@ -29,6 +29,8 @@ class MadrasahController extends Controller
     {
         $kode_madrasah = $request->kode_madrasah;
         $nama_madrasah = $request->nama_madrasah;
+        $nama_kamad = $request->nama_kamad;
+        $nama_kaur_tu = $request->nama_kaur_tu;
         $lokasi_madrasah = $request->lokasi_madrasah;
         $radius_madrasah = $request->radius_madrasah;
 
@@ -36,6 +38,8 @@ class MadrasahController extends Controller
             $data = [
                 'kode_madrasah' => $kode_madrasah,
                 'nama_madrasah' => $nama_madrasah,
+                'nama_kamad' => $nama_kamad,
+                'nama_kaur_tu' => $nama_kaur_tu,
                 'lokasi_madrasah' => $lokasi_madrasah,
                 'radius_madrasah' => $radius_madrasah
             ];
@@ -59,12 +63,16 @@ class MadrasahController extends Controller
     {
         $kode_madrasah = $request->kode_madrasah;
         $nama_madrasah = $request->nama_madrasah;
+        $nama_kamad = $request->nama_kamad;
+        $nama_kaur_tu = $request->nama_kaur_tu;
         $lokasi_madrasah = $request->lokasi_madrasah;
         $radius_madrasah = $request->radius_madrasah;
 
         try {
             $data = [
                 'nama_madrasah' => $nama_madrasah,
+                'nama_kamad' => $nama_kamad,
+                'nama_kaur_tu' => $nama_kaur_tu,
                 'lokasi_madrasah' => $lokasi_madrasah,
                 'radius_madrasah' => $radius_madrasah
             ];

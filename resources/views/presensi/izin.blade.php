@@ -13,7 +13,7 @@
     <!-- * App Header -->
 @endsection
 @section('content')
-<div class="row" style="margin-top:70px">
+<div class="row mb-2" style="margin-top:70px">
     <div class="col">
         @php
         $messagesuccess = Session::get('success');
@@ -31,7 +31,7 @@
         @endif
     </div>
 </div>
-<div class="row">
+<div class="row ">
     <div class="col">
     @if($dataizin->isEmpty())
     <div class="alert alert-outline-warning">
@@ -44,7 +44,7 @@
             <div class="item">
                 <div class="in">
                     <div>
-                        <b>{{ date("d-m-Y"), strtotime($d->tgl_izin) }}
+                        <b>{{ date("d-m-Y"), strtotime($d->tgl_izin_dari) }}
                             ( {{ $d->status == "s" ? "Sakit" : "Izin" }} )
                         </b><br>
                         <small class="text-muted">{{ $d->keterangan }}</small>
@@ -63,8 +63,33 @@
     @endforeach
     </div>
 </div>
-<div class="fab-button bottom-right" style="margin-bottom:70px">
+<!-- // botton awal -->
+<!-- <div class="fab-button bottom-right" style="margin-bottom:70px">
     <a href="/presensi/buatizin" class="fab"><ion-icon name="add-outline"></ion-icon></a> 
+</div> -->
+<!-- // botton awal -->
+
+<!-- // New Botton -->
+<div class="fab-button animate bottom-right dropdown" style="margin-bottom:70px">
+    <a href="#" class="fab bg-primary" data-toggle="dropdown">
+    <ion-icon name="add-outline" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
+    </a>
+    <div class="dropdown-menu">
+        <a href="/izinabsen" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="image outline"></ion-icon>
+            <p>Izin Absen</p>
+        </a>
+
+        <a href="/izinsakit" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+            <p>Sakit</p>
+        </a>
+
+        <a href="/izincuti" class="dropdown-item bg-primary">
+            <ion-icon name="document-outline" role="img" class="md hydrated" aria-label="videocam outline"></ion-icon>
+            <p>Cuti</p>
+        </a>
+    </div>
 </div>
 
 @endsection

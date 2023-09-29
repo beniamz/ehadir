@@ -14,7 +14,7 @@
           <path d="M5 12l14 0"></path>
         </svg>
       </span>
-        <input type="text" readonly value="{{ $pendidik->nik }}" id="nik" name="nik" class="form-control" placeholder="NIK">
+        <input type="text" readonly value="{{ $pendidik->nik }}" id="nik" name="nik" class="form-control" placeholder="NIK" autocomplete="off">
       </div>
     </div>
   </div>
@@ -33,7 +33,7 @@
           <path d="M15 13h1v3h-1z"></path>
         </svg>
       </span>
-        <input type="text" value="{{ $pendidik->nuptk }}" id="nuptk" name="nuptk" class="form-control" placeholder="NUPTK">
+        <input type="text" value="{{ $pendidik->nuptk }}" id="nuptk" name="nuptk" class="form-control" placeholder="NUPTK" autocomplete="off">
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@
           <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
         </svg>
       </span>
-        <input type="text" value="{{ $pendidik->nama_lengkap }}" id="nama_lengkap" name="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+        <input type="text" value="{{ $pendidik->nama_lengkap }}" id="nama_lengkap" name="nama_lengkap" class="form-control" placeholder="Nama Lengkap" autocomplete="off">
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@
           <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14z"></path>
         </svg>
       </span>
-        <input type="text" value="{{ $pendidik->jabatan }}" id="jabatan" name="jabatan" class="form-control" placeholder="Jabatan">
+        <input type="text" value="{{ $pendidik->jabatan }}" id="jabatan" name="jabatan" class="form-control" placeholder="Jabatan" autocomplete="off">
       </div>
     </div>
   </div>
@@ -82,7 +82,7 @@
           <path d="M15 6h6m-3 -3v6"></path>
         </svg>
       </span>
-        <input type="text" value="{{ $pendidik->no_hp }}" id="no_hp" name="no_hp" class="form-control" placeholder="No HP">
+        <input type="text" value="{{ $pendidik->no_hp }}" id="no_hp" name="no_hp" class="form-control" placeholder="No HP" autocomplete="off">
       </div>
     </div>
   </div>

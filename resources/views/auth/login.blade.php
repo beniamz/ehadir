@@ -31,10 +31,11 @@
 
         <div class="login-form mt-1">
             <div class="section">
-                <img src="{{ asset('assets/img/login/login.jpg') }}" alt="image" class="form-image">
+                <img src="{{ asset('tabler/static/illustrations/undraw_mobile_application_mr4r.svg') }}" alt="image" class="form-image">
+                <!-- <img src="{{ asset('assets/img/login/login.jpg') }}" alt="image" class="form-image"> -->
             </div>
             <div class="section mt-1">
-                <h1>E-PRESENSI</h1>
+                <h1>E - HADIR</h1>
                 <h4>Silahkan Login!</h4>
             </div>
             <div class="section mt-1 mb-5">
@@ -73,11 +74,11 @@
                             <a href="page-register.html">Register Now</a>
                         </div>
                         -->
-                        <div><a href="page-forgot-password.html" class="text-muted">Forgot Password?</a></div>
+                        <div><a href="#" class="text-muted">Forgot Password?</a></div>
                     </div>
                     
                     <div class="form-button-group">
-                        <button type="submit" class="btn btn-success btn-block btn-lg">Log in</button>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">LOGIN</button>
                     </div>
 
                 </form>

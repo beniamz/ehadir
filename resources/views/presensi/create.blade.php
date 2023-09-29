@@ -101,10 +101,10 @@
 <audio id="batasakhirabsen">
     <source src="{{ asset('assets/sound/batasakhirabsen.mp3')}}" type="audio/mpeg">
 </audio>
-<audio id="radius_sound">
+<audio id="belumwaktuabsen">
     <source src="{{ asset('assets/sound/belumwaktuabsen.mp3')}}" type="audio/mpeg">
 </audio>
-<audio id="radius_sound">
+<audio id="belumwaktupulang">
     <source src="{{ asset('assets/sound/belumwaktupulang.mp3')}}" type="audio/mpeg">
 </audio>
 
@@ -225,7 +225,13 @@
                     } else {
                         if(status[2] == "radius") {
                             radius_sound.play();
-                        } 
+                        } else if(status[2] == "batasakhirabsen") {
+                            batasakhirabsen.play();
+                        }else if(status[2] == "belumwaktuabsen") {
+                            belumwaktuabsen.play();
+                        }else if(status[2] == "belumwaktupulang") {
+                            belumwaktupulang.play();
+                        }
                         Swal.fire({
                             title: 'Error !',
                             text: status[1],

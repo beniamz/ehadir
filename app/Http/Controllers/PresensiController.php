@@ -62,6 +62,7 @@ class PresensiController extends Controller
         $namahari = $this->gethari();
         // dd($namahari);
         $nik = Auth::guard('pendidik')->user()->nik;
+        $kode_dept = Auth::guard('pendidik')->user()->kode_dept;
         $cek = DB::table('presensi')
                 ->where('tgl_presensi', $hariini)
                 ->where('nik', $nik)->count();
@@ -70,19 +71,26 @@ class PresensiController extends Controller
         $kode_madrasah = Auth::guard('pendidik')->user()->kode_madrasah;
         $tilok = DB::table('madrasah')->where('kode_madrasah', $kode_madrasah)->first(); 
         
-        //mendapatkan data jam kerja
+        //mendapatkan data jam kerja perorangan
         $jamkerja = Db::table('konfigurasi_jamkerja')->where('nik', $nik)
         ->join('jam_kerja', 'konfigurasi_jamkerja.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
         ->where('hari', $namahari)->first();
+        //mendapatkan data jam kerja dari departemen
+            if($jamkerja == null ) {
+                $jamkerja = DB::table('konfigurasi_jk_dept_detail')
+                ->join('konfigurasi_jk_dept', 'konfigurasi_jk_detp_detail.kode_jk_dept', '=', 'konfigurasi_jk_dept.kode_jk_dept')
+                ->join('jam_kerja', 'konfigurasi_jk_dept_detail.kode_jam_kerja', '=', 'jam_kerja.kode_jam_kerja')
+                ->where('kode_dept',  $kode_dept)
+                ->where('kode_madrasah', $kode_madrasah)
+                ->where('hari', $namahari)->first();  
+            }             
         // dd($jamkerja);
-        if($jamkerja == null) {
+        if($jamkerja == null ) {
             return view('presensi.notifjamker');
         } else {
             return view('presensi.create', compact('cek','tilok', 'jamkerja'));
         }
-
         // return view('presensi.create', compact('cek','tilok', 'jamkerja'));
-
     }
 
     public function store(Request $request)
@@ -139,7 +147,7 @@ class PresensiController extends Controller
              if ($cek > 0) {
                 // tidak bisa absen pulang jika belum waktunya
                 if($jam < $jamkerja->jam_pulang) {
-                    echo "error|Maaf Belum Waktunya Pulang|out";
+                    echo "error|Maaf Belum Waktunya Pulang|belumwaktupulang";
                 } else {
                     $data_pulang = [
                         'jam_out'        => $jam,
@@ -157,9 +165,9 @@ class PresensiController extends Controller
             } else {
                 // tidak bisa absen jika bukan jam kerjanya
                 if ($jam < $jamkerja->awal_jam_masuk) {
-                    echo "error|Maaf.., Belum waktunya melakukan Absensi|in";
+                    echo "error|Maaf.., Belum waktunya melakukan Absensi|belumwaktuabsen";
                 } else if ($jam > $jamkerja->akhir_jam_masuk) {
-                    echo "error|Maaf tidak bisa Absen, karena melewati batas akhir jam absensi hari ini|in";
+                    echo "error|Maaf tidak bisa Absen, karena melewati batas akhir jam absensi hari ini|batasakhirabsen";
                     } else {
                         $data = [
                             'nik'               => $nik,
@@ -215,7 +223,7 @@ class PresensiController extends Controller
         $password = Hash::make($request->password);        
         $pendidik = DB::table('pendidik')->where('nik', $nik)->first();
         $request->validate([
-            'foto' => 'image|mime:jpg|max:500|required'
+            'foto' => 'image|mimes:png|max:200|required'
         ]);
 
         if($request->hasFile('foto')) {
@@ -281,7 +289,7 @@ class PresensiController extends Controller
     public function izin()
     {
         $nik = Auth::guard('pendidik')->user()->nik;
-        $dataizin = DB::table('pengajuan_izin')->where('nik', $nik)->orderByDesc('tgl_izin')->get();
+        $dataizin = DB::table('pengajuan_izin')->where('nik', $nik)->orderByDesc('tgl_izin_dari')->get();
         return view('presensi.izin', compact('dataizin'));
     }
 
@@ -359,6 +367,7 @@ class PresensiController extends Controller
         $bulan  = $request->bulan;
         $tahun  = $request->tahun;
         $namabulan = ["","Januari","Pebruari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"];
+        $madrasah = DB::table('madrasah')->first();
 
         $pendidik = DB::table('pendidik')->where('nik', $nik)
             ->join('departemen', 'pendidik.kode_dept', '=', 'departemen.kode_dept')
@@ -382,7 +391,7 @@ class PresensiController extends Controller
             return view('presensi.cetaklaporanexcel', compact('bulan', 'tahun', 'namabulan', 'pendidik', 'presensi'));
         }
 
-        return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'pendidik', 'presensi'));
+        return view('presensi.cetaklaporan', compact('bulan', 'tahun', 'namabulan', 'pendidik', 'presensi', 'madrasah'));
 
     }
 
@@ -398,6 +407,7 @@ class PresensiController extends Controller
         $bulan  = $request->bulan;
         $namabulan = ["","Januari","Pebruari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","Nopember","Desember"];
         $tahun  = $request->tahun;
+        $madrasah = DB::table('madrasah')->first();
         $rekap  = DB::table('presensi')
             ->selectRaw('presensi.nik,nama_lengkap,jam_masuk,jam_pulang,
             MAX(IF(DAY(tgl_presensi) = 1, CONCAT(jam_in,"-",IFNULL(jam_out,"00:00:00")),"")) AS tgl_1,
@@ -448,18 +458,18 @@ class PresensiController extends Controller
                 header("Content-Disposition: attachment; filename=Rekapitulasi Kehadiran Pendidik $time.xls");
             }
 
-        return view('presensi.cetakrekap', compact('bulan','tahun','rekap','namabulan'));
+        return view('presensi.cetakrekap', compact('bulan','tahun','rekap','namabulan', 'madrasah'));
     }
 
     public function izinsakit(Request $request)
     {
         // QUERY DENGAN FUNGSI PENCARIAN MENGUNAKAN MODEL AJUAN IZIN
         $query = Pengajuanizin::query();
-        $query->select('id', 'tgl_izin', 'pengajuan_izin.nik', 'nama_lengkap', 'status_approved', 'jabatan','keterangan');
+        $query->select('id', 'tgl_izin_dari', 'pengajuan_izin.nik', 'nama_lengkap', 'status_approved', 'jabatan','keterangan');
         $query->join('pendidik', 'pengajuan_izin.nik', '=' , 'pendidik.nik');
         // cek input pencarian
         if(!empty($request->dari) && !empty($request->sampai)) {
-            $query->whereBetween('tgl_izin', [$request->dari, $request->sampai]);
+            $query->whereBetween('tgl_izin_dari', [$request->dari, $request->sampai]);
         }
 
         if(!empty($request->nik)) {
@@ -474,7 +484,7 @@ class PresensiController extends Controller
             $query->where('status_approved', $request->status_approved);
         }
 
-        $query->orderBy('tgl_izin', 'desc');
+        $query->orderBy('tgl_izin_dari', 'desc');
         $izinsakit = $query->paginate(10);
         $izinsakit->appends($request->all());
 

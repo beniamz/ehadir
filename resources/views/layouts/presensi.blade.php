@@ -40,10 +40,6 @@
     @include('layouts.buttonNav')
 
     @include('layouts.script')
-
-
-
-
     
 
 </body>

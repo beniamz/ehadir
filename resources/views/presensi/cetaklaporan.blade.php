@@ -17,32 +17,45 @@
     @page { size: A4 }
     
     .title {
-      width: 100%;
-      font-family: Arial, Helvetica, sans-serif;
+      width: 95%;
+      font-family: Helvetica, Arial, sans-serif;
       font-size: 14px;
       font-weight: bold;  
+      border: 0.5px solid ;      
+      margin-left: 1cm;
       
     }
 
     .tabeldatapendidik {
-      margin-top: 10px;
+      margin-top: 1px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;  
       margin-left: 1cm;
+      border: 1px solid ; 
+      
     }
 
     .tabeldatapendidik td {
       padding: 3px;
-      
     }
 
     .tabelpresensi {
       width: 100%;
-      margin-top: 10px;
+      margin-top: 3px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;
       border-collapse: collapse;
       margin-left: 1cm;
+    }
+
+    .tglcetak {
+      border: 1px solid ;
+      width: 100%;
+      margin-left: 1cm;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      font-size: 13px;  
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     .tabelpresensi tr th {
@@ -53,7 +66,7 @@
 
     .tabelpresensi tr td {
       border: 1px solid ;
-      padding:3px;
+      padding:1px;
          
     }
 
@@ -65,11 +78,12 @@
     .header {
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;
-      padding-top: 20px;
+      padding-top:5px;
+      padding-bottom:5px;
       margin-left: 1cm;
+      margin-top: 3px;
+      border: 1px solid ;
     }
-    
-    
   </style>
 </head>
 
@@ -95,30 +109,39 @@ function selisih($jam_masuk, $jam_keluar)
 
   <!-- Each sheet element should have the class "sheet" -->
   <!-- "padding-**mm" is optional: you can set 10, 15, 20 or 25 -->
-  <section class="sheet padding-5mm">
-
+  <section class="sheet padding-10mm">
+<!-- 
     <table style="width: 100%">
-      <tr>
+      <tr class="mt-3">
         <td>
           <img src="{{ asset('assets/img/kop_mi.png') }}" width="100%" height="170px">
         </td>
       </tr>
-    </table>
+    </table> -->
   
     <div class="table-responsive-sm">
 
-      <table style="width: 100%">
-        <tr>
-          <td style="text-align:center">
-            <span class="title" >
-            LAPORAN PRESENSI<br>
-            <b>PERIODE BULAN : {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}</b>
-            </span>
-          </td>
+      <table class="title" style="width:95% ">
+        <tr >
+          <th >
+            <b>LAPORAN DETAIL HARIAN KEHADIRAN GURU</b>
+          </th>         
         </tr>        
+        <tr>
+          <th><b>{{ strtoupper($madrasah->nama_madrasah) }}</b></th>
+        </tr>           
       </table>
 
-      <table class="tabeldatapendidik" style="width: 90%">
+      <table class="tglcetak" style="width:95%">
+        <tr>   
+          <td style="background-color: #dbdbdd; text-align: center">Periode Bulan</td> 
+          <td><b>{{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}</b></td> 
+          <td style="background-color: #dbdbdd; text-align: center" >Tanggal Cetak</td> 
+          <td><b> {{ date("d-m-Y")}} </b></td>
+        </tr> 
+      </table>
+    
+      <table class="tabeldatapendidik" style="width: 95%">
       <tr>
           <td rowspan="4" style="text-align:center">
             @php
@@ -129,34 +152,30 @@ function selisih($jam_masuk, $jam_keluar)
          
         </tr>
         <tr>
-          <td>NIK</td>
-          <td>:</td>
-          <td><b>{{ $pendidik->nik}}</b></td>
-          
-          <td>Jabatan</td>
-          <td>:</td>
+          <td style="background-color: #dbdbdd;">Nama Lengkap</td>
+          <td><b>{{ strtoupper($pendidik->nama_lengkap)}}</b></td>
+
+          <td style="background-color: #dbdbdd;">Jabatan</td>          
           <td><b>{{ $pendidik->jabatan}}</b></td>
+          
         </tr>  
         <tr>
-          <td>NUPTK</td>
-          <td>:</td>
+          <td style="background-color: #dbdbdd;">NUPTK</td>          
           <td><b>{{ $pendidik->nuptk}}</b></td>
-
-          <td>Status Pendidik</td>
-          <td>:</td>
+          
+          <td style="background-color: #dbdbdd;">Status Pendidik</td>         
           <td><b>{{ $pendidik->nama_dept}}</b></td>
         </tr> 
         <tr>
-          <td>Nama Lengkap</td>
-          <td>:</td>
-          <td><b>{{ $pendidik->nama_lengkap}}</b></td>
-
-          <td>No Handphone</td>
-          <td>:</td>
+          <td style="background-color: #dbdbdd;">NIK</td>          
+          <td><b>{{ $pendidik->nik}}</b></td>
+          
+          
+          <td style="background-color: #dbdbdd;">No Handphone</td>          
           <td><b>{{ $pendidik->no_hp}}</b></td>
         </tr>
       </table>
-      <table class="tabelpresensi" style="width: 90%">
+      <table class="tabelpresensi" style="width: 95%">
           <tr>
             <th>No</th>
             <th>Tanggal</th>
@@ -181,7 +200,7 @@ function selisih($jam_masuk, $jam_keluar)
             <td style="text-align: center">{{ date("d-m-y", strtotime($d->tgl_presensi)) }}</td>
             <td style="text-align: center">{{ $d->jam_masuk}}</td>
             <td style="text-align: center">{{ $d->jam_in != null ? $d->jam_in : 'Tidak Absen' }}</td>
-            <td><img src="{{ url($foto_in) }}" alt="foto" class="foto"></td>
+            <td style="text-align: center"><img src="{{ url($foto_in) }}" alt="foto" class="foto"></td>
             <td style="text-align: center">{{ $d->jam_pulang }}</td>
             <td style="text-align: center">{{ $d->jam_out != null ? $d->jam_out : 'Tidak Absen' }}</td>
             <td style="text-align: center">
@@ -218,11 +237,12 @@ function selisih($jam_masuk, $jam_keluar)
             </td>
           </tr>
           @endforeach
-      </table>
+      </table> 
 
-      <table width="95%" class="header">
+      
+      <table class=" header table table-bordered" width="95%" >
             <tr>
-              <td style="text-align: center">Mengetahui</td>
+              <th style="text-align: center">Mengetahui</th>
               <td style="text-align: center">Kota Depok, {{ date("d-m-Y")}}</td>
             </tr>
             <tr>
@@ -231,12 +251,10 @@ function selisih($jam_masuk, $jam_keluar)
             </tr>
             <tr>
               <td 
-                style="text-align: center; 
-                      vertical-align:bottom" height="50px"><u><b>Jamal, S.Pd.I</u></b>
+                style="text-align: center; vertical-align:bottom" height="50px"><u><b>{{ strtoupper($madrasah->nama_kamad) }}</u></b>
               </td>
               <td 
-                style="text-align: center; 
-                      vertical-align:bottom" height="50px"><u><b>Siti Mawaddah, S.Kom</u></b>
+                style="text-align: center; vertical-align:bottom" height="50px"><u><b>{{ strtoupper($madrasah->nama_kaur_tu) }}</u></b>
               </td>
             </tr>
             

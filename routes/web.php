@@ -5,6 +5,7 @@ use App\Http\Controllers\DashbardController;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
+use App\Http\Controllers\IzinabsenController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\MadrasahController;
 use App\Http\Controllers\PendidikController;
@@ -62,6 +63,13 @@ Route::middleware(['auth:pendidik'])->group(function () {
     Route::get('/presensi/buatizin', [PresensiController::class, 'buatizin']);
     Route::post('/presensi/storeizin', [PresensiController::class, 'storeizin']);
     Route::post('/presensi/cekpengajuanizin', [PresensiController::class, 'cekpengajuanizin']);
+
+    // Izin Absen
+    Route::get('/izinabsen', [IzinabsenController::class, 'create']);
+    Route::post('/izinabsen/store', [IzinabsenController::class, 'store']);
+
+    
+
 });
 
 Route::middleware(['auth:user'])->group(function() {
@@ -122,7 +130,6 @@ Route::middleware(['auth:user'])->group(function() {
     Route::post('/konfigurasi/jamkerjadept/{kode_jk_dept}/update', [KonfigurasiController::class, 'updatejamkerjadept']);
     Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/show', [KonfigurasiController::class, 'showjamkerjadept']);
     Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/delete', [KonfigurasiController::class, 'deletejamkerjadept']);
-
 
     
 

@@ -102,9 +102,9 @@ function selisih($jam_masuk, $jam_keluar)
         </td>
         <td>
           <span class="title" >
-          REKAPITULASI PRESENSI PENDIDIK DAN TENAGA KEPENDIDIKAN<br>
+          REKAPITULASI KEHADIRAN PENDIDIK DAN TENAGA KEPENDIDIKAN<br>
           <b>PERIODE BULAN : {{ strtoupper($namabulan[$bulan]) }} {{ $tahun }}</b><br>
-          MADRASAH IBTIDAIYAH AL ISLAMIYAH AMZ
+          {{ strtoupper($madrasah->nama_madrasah) }}
           <br>Jl. Jasawarga Kp. Sugutamu Rt.003/021 Kel. Baktijaya Kec. Sukmajaya Kota Depok 16418</br>
           </span>
         </td>
@@ -181,11 +181,17 @@ function selisih($jam_masuk, $jam_keluar)
               <td style="text-align: center">Ka.Ur. Tata Usaha</td>
             </tr>
             <tr>
-              <td 
-                style="text-align: center; vertical-align:bottom" height="50px"><u><b>Jamal, S.Pd.I</u></b>
+              <!-- <td 
+                style="text-align: center; vertical-align:bottom" height="50px"><u><b>( .................................................... )</u></b>
               </td>
               <td 
-                style="text-align: center; vertical-align:bottom" height="50px"><u><b>Siti Mawaddah, S.Kom</u></b>
+                style="text-align: center; vertical-align:bottom" height="50px"><u><b>( .................................................... )</u></b>
+              </td> -->
+              <td 
+                style="text-align: center; vertical-align:bottom" height="50px"><u><b>{{ strtoupper($madrasah->nama_kamad) }}</u></b>
+              </td>
+              <td 
+                style="text-align: center; vertical-align:bottom" height="50px"><u><b>{{ strtoupper($madrasah->nama_kaur_tu) }}</u></b>
               </td>
             </tr>
       </table>
