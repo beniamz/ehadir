@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CutiController;
 use App\Http\Controllers\DashbardController;
 use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\IzinabsenController;
+use App\Http\Controllers\IzinsakitController;
 use App\Http\Controllers\KonfigurasiController;
 use App\Http\Controllers\MadrasahController;
 use App\Http\Controllers\PendidikController;
@@ -67,6 +69,10 @@ Route::middleware(['auth:pendidik'])->group(function () {
     // Izin Absen
     Route::get('/izinabsen', [IzinabsenController::class, 'create']);
     Route::post('/izinabsen/store', [IzinabsenController::class, 'store']);
+
+    // Izin Sakit
+    Route::get('/izinsakit', [IzinsakitController::class, 'create']);
+    Route::post('/izinsakit/store', [IzinsakitController::class, 'store']);
 
     
 
@@ -130,6 +136,13 @@ Route::middleware(['auth:user'])->group(function() {
     Route::post('/konfigurasi/jamkerjadept/{kode_jk_dept}/update', [KonfigurasiController::class, 'updatejamkerjadept']);
     Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/show', [KonfigurasiController::class, 'showjamkerjadept']);
     Route::get('/konfigurasi/jamkerjadept/{kode_jk_dept}/delete', [KonfigurasiController::class, 'deletejamkerjadept']);
+
+    //Master Cuti
+    Route::get('/cuti', [CutiController::class, 'index']);
+    Route::post('/cuti/store', [CutiController::class, 'store']);
+    Route::post('/cuti/edit', [CutiController::class, 'edit']);
+    Route::post('/cuti/{kode_cuti}/update', [CutiController::class, 'update']);
+    Route::post('/cuti/{kode_cuti}/delete', [CutiController::class, 'delete']);
 
     
 

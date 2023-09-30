@@ -224,7 +224,7 @@
                     Data Master
                   </span>
                 </a>
-                <div class="dropdown-menu {{ request()->is(['pendidik', 'departemen','madrasah']) ? 'show' : '' }}">
+                <div class="dropdown-menu {{ request()->is(['pendidik', 'departemen','madrasah', 'cuti']) ? 'show' : '' }}">
                   <div class="dropdown-menu-columns">
                     <div class="dropdown-menu-column">
                       <a class="dropdown-item {{ request()->is('pendidik') ? 'active' : '' }}" href="/pendidik">
@@ -235,6 +235,9 @@
                       </a>
                       <a class="dropdown-item {{ request()->is('madrasah') ? 'active' : '' }}" href="/madrasah">
                         Data Madrasah 
+                      </a>
+                      <a class="dropdown-item {{ request()->is('cuti') ? 'active' : '' }}" href="/cuti">
+                        Cuti 
                       </a>
                     </div>
                   </div>

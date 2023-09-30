@@ -20,7 +20,7 @@
             <ion-icon name="chevron-back-outline"></ion-icon>
         </a>
     </div>
-    <div class="pageTitle">Form Ajuan Izin Tidak Hadir/Absen</div>
+    <div class="pageTitle">Form Ajuan Izin Sakit</div>
     <div class="right"></div>
 </div>
 <!-- * App Header -->
@@ -29,15 +29,9 @@
 @section('content')
 <div class="row" style="margin-top:70px">
     <div class="col">
-        <form method="POST"  action="/izinabsen/store" id="frmizin">
+        <form method="POST"  action="/izinsakit/store" id="frmizin" enctype="multipart/form-data">
             @csrf
-            <!-- <div class="form-group">
-                <select name="status" id="status" class="form-control">
-                    <option value="">Pilih Izin/Sakit</option>
-                    <option value="i">Izin</option>
-                    <option value="s">Sakit</option>
-                </select>
-            </div> -->
+
             <div class="form-group">
                 <input type="text" id="tgl_izin_dari" name="tgl_izin_dari" class="form-control datepicker"  placeholder="Dari tanggal">
             </div>
@@ -46,12 +40,24 @@
             </div>
             <div class="form-group">
                 <input type="text" id="jml_hari" name="jml_hari" class="form-control"  placeholder="Jumlah Hari" readonly>
-            </div>
-            
+            </div> 
+            <div class="custom-file-upload" id="fileUpload1" style="height: 100px !important">
+                <input type="file" name="sid" id="fileuploadInput" accept=".png, .jpg, .jpeg">
+                <label for="fileuploadInput">
+                  <span>
+                    <strong>
+                      <ion-icon name="cloud-upload-outline" role="img" class="md hydrated" 
+              aria-label="cloud upload outline"></ion-icon>
+                          <i>Tap to Upload SID</i>
+                    </strong>
+                  </span>
+                </label>
+            </div>           
             <div class="form-group">
                 <input type="text" id="keterangan" name="keterangan" class="form-control"  placeholder="Isi alasannya/keterangan" autocomplete="off">
             </div>
-            <div class="form-group">
+
+            <div class="form-group mt-2">
                 <button class="btn btn-primary btn-block">
                     Kirim
                 </button>

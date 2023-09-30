@@ -13,6 +13,22 @@
     <!-- * App Header -->
 @endsection
 @section('content')
+<style>
+    .historicontent {
+        display:flex;
+        right: 40px;
+    }
+    .datapresensi {
+        left: 10px;                        
+        right: 10px;                        
+    }
+    .status {
+        position: absolute;
+        right: 20px;
+        bottom: 40px;
+    }
+</style>
+
 <div class="row mb-2" style="margin-top:70px">
     <div class="col">
         @php
@@ -34,12 +50,63 @@
 <div class="row ">
     <div class="col">
     @if($dataizin->isEmpty())
-    <div class="alert alert-outline-warning">
-        <p>Data Belum Ada</p>
-    </div>
+        <div class="alert alert-outline-warning">
+            <p>Data Belum Ada</p>
+        </div>
     @endif
     @foreach($dataizin as $d)
-    <ul class="listview image-listview">
+        @php
+            if($d->status=="i") {
+                $status = "Izin";
+            }else if($d->status=="s") {
+                $status = "Sakit";
+            }else if($d->status=="c") {
+                $status = "Cuti";
+            }else{
+                $status = "Not Found";
+            }
+        @endphp
+    <div class="card mb-1">
+        <div class="card-body">
+            <div class="historicontent">
+                <div class="iconpresensi mr-2">
+                    @if($d->status=="i")
+                    <ion-icon name="document-outline" style="font-size:48px; color: rgb(21, 95, 207)"></ion-icon>
+                    @elseif($d->status=="s")
+                    <ion-icon name="medkit-outline" style="font-size:48px; color: rgb(191, 7, 65)"></ion-icon>
+                    @else($d->status=="c")
+                    <ion-icon name="document-lock-outline" tyle="font-size:48px; color:orange"></ion-icon>
+
+                    @endif
+                </div>
+                <div class="datapresensi">
+                    <h4 style="line-height: 3px;">{{ date("d-m-Y", strtotime($d->tgl_izin_dari)) }} ( {{ $status }} )</h4>
+                    <small>{{ date("d-m-Y", strtotime($d->tgl_izin_dari)) }} s/d {{ date("d-m-Y", strtotime($d->tgl_izin_sampai)) }}</small>
+                    <p>{{ $d->keterangan }}
+                        <br>
+                        @if (!empty($d->doc_sid))
+                        <span style="color:blue">
+                        <ion-icon name="document-attach-outline"></ion-icon></span>
+                        Lihat SID
+                        @endif
+                    </p>
+                  
+                </div>
+                <div class="status">
+                    @if($d->status_approved == 0)
+                        <span class="badge bg-warning">Pending</span>
+                        @elseif($d->status_approved == 1)
+                        <span class="badge bg-success">Disetujui</span>
+                        @elseif($d->status_approved == 2)
+                        <span class="badge bg-danger">Ditolak</span>
+                    @endif  
+                    <br>
+                    <span class="badge bg-primary mt-1" style="line-height: 17px;"><b>  {{ hitunghari($d->tgl_izin_dari,$d->tgl_izin_sampai) }} Hari</b></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <ul class="listview image-listview">
         <li>
             <div class="item">
                 <div class="in">
@@ -59,7 +126,7 @@
                 </div>
             </div>
         </li>
-    </ul>
+    </ul> -->
     @endforeach
     </div>
 </div>
